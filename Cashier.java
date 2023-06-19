@@ -19,9 +19,18 @@ public class Cashier extends javax.swing.JFrame {
         TampilData();
         txtID.setVisible(false);
         bBatal.setVisible(false);
+        bEdit.setEnabled(false);
+        bHapus.setEnabled(false);
         labelTotalBayar.setVisible(false);
         labelRupiah.setVisible(false);
         labelBayaran.setVisible(false);
+    }
+    
+    private void openDatabaseForm() {
+        // Membuat objek instance dari form Database
+        Database databaseForm = new Database();
+        // Menampilkan form Database
+        databaseForm.setVisible(true);
     }
 
     //Membersihkan Isi Input
@@ -132,6 +141,7 @@ public class Cashier extends javax.swing.JFrame {
         bEdit = new javax.swing.JButton();
         bBatal = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
+        bDashboard = new javax.swing.JButton();
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setLayout(null);
@@ -270,7 +280,7 @@ public class Cashier extends javax.swing.JFrame {
                 bTambahActionPerformed(evt);
             }
         });
-        PanelUtama.add(bTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 150, 30));
+        PanelUtama.add(bTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 90, 30));
 
         bEdit.setBackground(new java.awt.Color(255, 255, 255));
         bEdit.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
@@ -280,7 +290,7 @@ public class Cashier extends javax.swing.JFrame {
                 bEditActionPerformed(evt);
             }
         });
-        PanelUtama.add(bEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 390, 150, 30));
+        PanelUtama.add(bEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 390, 90, 30));
 
         bBatal.setBackground(new java.awt.Color(255, 255, 255));
         bBatal.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
@@ -290,7 +300,7 @@ public class Cashier extends javax.swing.JFrame {
                 bBatalActionPerformed(evt);
             }
         });
-        PanelUtama.add(bBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 390, 70, 30));
+        PanelUtama.add(bBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 390, 90, 30));
 
         bHapus.setBackground(new java.awt.Color(255, 255, 255));
         bHapus.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
@@ -301,6 +311,16 @@ public class Cashier extends javax.swing.JFrame {
             }
         });
         PanelUtama.add(bHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 430, 320, 30));
+
+        bDashboard.setBackground(new java.awt.Color(255, 255, 255));
+        bDashboard.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
+        bDashboard.setText("Dashboard");
+        bDashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDashboardActionPerformed(evt);
+            }
+        });
+        PanelUtama.add(bDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 120, 30));
 
         getContentPane().add(PanelUtama, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 500));
 
@@ -322,9 +342,9 @@ public class Cashier extends javax.swing.JFrame {
                 if (bTambah.getText().equals("Tambah")) {
 
                     // Periksa apakah kode barang ada dalam tabel db_produk
-                    String checkQuery = "SELECT * FROM db_produk WHERE Kode = ?";
+                    String checkQuery = "SELECT Harga FROM db_produk WHERE LOWER(Kode) = LOWER(?)";
                     PreparedStatement checkStatement = Konektor.prepareStatement(checkQuery);
-                    checkStatement.setString(1, kodeBarang);
+                    checkStatement.setString(1, txtKode.getText());
                     ResultSet checkResultSet = checkStatement.executeQuery();
 
                     if (checkResultSet.next()) {
@@ -334,8 +354,8 @@ public class Cashier extends javax.swing.JFrame {
                         try (PreparedStatement statement = Konektor.prepareStatement(sql)) {
                             // Sisanya tetap seperti sebelumnya
                             kodeBarang = txtKode.getText();
-                            statement.setString(1, kodeBarang);
                             kodeProduk();
+                            statement.setString(1, kodeBarang);
                             statement.setString(2, txtNama.getText());
                             statement.setInt(3, hargaBarang);
                             statement.setString(4, txtJumlahBarang.getText());
@@ -365,6 +385,8 @@ public class Cashier extends javax.swing.JFrame {
         txtJumlahBarang.setText(tabelData.getValueAt(tabelData.getSelectedRow(), 4).toString());
         txtID.setText(tabelData.getValueAt(tabelData.getSelectedRow(), 0).toString());
 
+        bEdit.setEnabled(true);
+        bHapus.setEnabled(true);
         bTambah.setEnabled(false);
         bBatal.setVisible(true);
     }                                      
@@ -381,6 +403,7 @@ public class Cashier extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Data Berhasil Dihapus!");
                 tabelData.repaint();
                 tabelData.clearSelection();
+                Clear();
                 TampilData();
 
             } catch (Exception e) {
@@ -438,6 +461,8 @@ public class Cashier extends javax.swing.JFrame {
         // TODO add your handling code here:
         tabelData.clearSelection();
         Clear();
+        bEdit.setEnabled(false);
+        bHapus.setEnabled(false);
         bBatal.setVisible(false);
         bTambah.setEnabled(true);
         TampilData();
@@ -573,6 +598,12 @@ public class Cashier extends javax.swing.JFrame {
 
     }                                       
 
+    private void bDashboardActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+        openDatabaseForm();
+        this.setVisible(false);
+    }                                          
+
     /**
      * @param args the command line arguments
      */
@@ -617,6 +648,7 @@ public class Cashier extends javax.swing.JFrame {
     private javax.swing.JButton bBatal;
     private javax.swing.JButton bBayar;
     private javax.swing.JButton bBersih;
+    private javax.swing.JButton bDashboard;
     private javax.swing.JButton bEdit;
     private javax.swing.JButton bHapus;
     private javax.swing.JButton bTambah;
