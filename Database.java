@@ -17,6 +17,13 @@ public class Database extends javax.swing.JFrame {
         bBatal.setEnabled(false);
 
     }
+    
+        private void openKasirForm() {
+        // Membuat objek instance dari form Database
+        Cashier Kasir = new Cashier();
+        // Menampilkan form Database
+        Kasir.setVisible(true);
+    }
 
     private void TampilData() {
         try {
@@ -80,6 +87,7 @@ public class Database extends javax.swing.JFrame {
         bHapus = new javax.swing.JButton();
         txtID = new javax.swing.JTextField();
         bSimpan = new javax.swing.JButton();
+        bKasir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -152,7 +160,7 @@ public class Database extends javax.swing.JFrame {
                 bBatalActionPerformed(evt);
             }
         });
-        jPanel1.add(bBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 470, 100, -1));
+        jPanel1.add(bBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 470, 100, -1));
 
         bHapus.setBackground(new java.awt.Color(255, 255, 255));
         bHapus.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
@@ -173,7 +181,17 @@ public class Database extends javax.swing.JFrame {
                 bSimpanActionPerformed(evt);
             }
         });
-        jPanel1.add(bSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 470, 240, -1));
+        jPanel1.add(bSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 470, 180, -1));
+
+        bKasir.setBackground(new java.awt.Color(255, 255, 255));
+        bKasir.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
+        bKasir.setText("Kasir");
+        bKasir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bKasirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bKasir, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 470, 160, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 580));
 
@@ -305,6 +323,12 @@ public class Database extends javax.swing.JFrame {
         TampilData();
     }                                      
 
+    private void bKasirActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
+        openKasirForm();
+        this.setVisible(false);
+    }                                      
+
     /**
      * @param args the command line arguments
      */
@@ -343,6 +367,7 @@ public class Database extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton bBatal;
     private javax.swing.JButton bHapus;
+    private javax.swing.JButton bKasir;
     private javax.swing.JButton bSimpan;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
